@@ -1,10 +1,13 @@
 from art import text2art
 from loguru import logger
 from termcolor import colored, cprint
+from collections import defaultdict
+from random import choice
 
 import sys
 
 from clonefish.options import Options, OptionsManager
+from clonefish.external import ExternalProvider
 
 class Application:
 
@@ -20,19 +23,42 @@ class Application:
         self.set_options()
         self.initialize_logger()
 
+        self.execute()
+
+    def execute(self) -> None:
+        """Execute the command based on user selected options
+        """
+
+        provider = None
+        if self.options.id == Options.CommandType.EXTERNAL:
+            provider = ExternalProvider(self.options)
+
+        provider.execute()
+
     def initialize_logger(self) -> None:
         """Create new loggers with custom formats for
             the application to use.
         """
 
         info_prefix = colored("[+]", "blue", attrs=["bold"])
-        debug_prefix = colored("[!]", "yellow", attrs=["bold"])
-        error_prefix = colored("[~]", "red", attrs=["bold"])
+        debug_prefix = colored("[?]", "yellow", attrs=["bold"])
+        error_prefix = colored("[!]", "red", attrs=["bold"])
 
-        logger.add(sys.stdout, format=f"{info_prefix} {{message}}", level="INFO")
-        logger.add(sys.stdout, format=f"{debug_prefix} {{message}}", level="DEBUG")
-        logger.add(sys.stdout, format=f"{error_prefix} {{message}}", level="ERROR")
+        logger.remove()
 
+        def formatter(record):
+            formated = " <bold>{message}</>\n{exception}"
+
+            prefix = info_prefix
+            if record["level"].name == "ERROR":
+                prefix = error_prefix
+            elif record["level"].name == "ERROR":
+                prefix = debug_prefix
+
+            return prefix + formated
+
+
+        logger.add(sys.stdout, format=formatter)
 
     def set_options(self) -> None:
         """This function is used to fetch
@@ -44,16 +70,16 @@ class Application:
         """
 
         argv = sys.argv
+        optionsManager = OptionsManager()
 
         # Check if any arguments has been
         # passed to `sys.argv`
         if len(argv) <= 1:
             # Get options by stdio prompts.
-            self.options = OptionsManager.prompt()
+            self.options = optionsManager.prompt()
         else:
             # TODO
             pass
-
 
     def print_banner(self) -> None:
         """This utility function is used to print some *sexy*
