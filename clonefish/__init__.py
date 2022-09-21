@@ -1,5 +1,6 @@
 
+from clonefish.main import Application
 
-
-def main():
-  print("TODO")
+# entry point
+def main() -> None:
+  app = Application()

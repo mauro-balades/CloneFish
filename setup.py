@@ -1,3 +1,4 @@
+import os
 from setuptools import setup
 
 with open("clonefish/__version__.py") as f:
@@ -7,6 +8,9 @@ with open("clonefish/__version__.py") as f:
             exec(line, info)
             break
 
+with open('requirements.txt') as f:
+    required = f.read().splitlines()
+
 setup(
     name="CloneFish",
     version=info["version"],
@@ -15,15 +19,10 @@ setup(
     author_email="mauro.balades@tutanota.com",
     url="https://github.com/mauro-balades/CloneFish",
     packages=["clonefish"],
-    requirements=[
-        "hiurlparser",
-        "Jinja2",
-        "falcon",
-        "minify-html",
-    ],
+    install_requires=required,
     entry_points = {
           'console_scripts': [
-              'clonefish = package.module:main',                  
+              'cloneFish = clonefish:main',
           ],              
       },
     classifiers=[
