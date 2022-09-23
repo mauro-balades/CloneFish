@@ -4,4 +4,5 @@ art==5.7
 termcolor==2.0.1
 requests==2.28.1
 beautifulsoup4==4.11.1
-flask
+mitmproxy
+flask==2.0.3

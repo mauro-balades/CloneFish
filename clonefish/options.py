@@ -5,8 +5,8 @@ import questionary
 class Options:
     class CommandType(Enum):
         EXTERNAL = 0
-        INTERFERE = 0
-        TEMPLATE = 1
+        INTERFERE = 1
+        TEMPLATE = 2
 
     id: CommandType
     external_opts = { "url": "" }
