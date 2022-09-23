@@ -5,6 +5,7 @@ import questionary
 class Options:
     class CommandType(Enum):
         EXTERNAL = 0
+        INTERFERE = 0
         TEMPLATE = 1
 
     id: CommandType
@@ -15,7 +16,8 @@ class OptionsManager:
 
     command_types = {
         "Copy from external website": Options.CommandType.EXTERNAL,
-        "Use predefined template": Options.CommandType.TEMPLATE
+        "Use predefined template": Options.CommandType.TEMPLATE,
+        "Interfere new connections and add script": Options.CommandType.INTERFERE
     }
 
     def prompt(self) -> Options:

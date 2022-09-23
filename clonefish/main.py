@@ -1,13 +1,12 @@
 from art import text2art
 from loguru import logger
-from termcolor import colored, cprint
-from collections import defaultdict
-from random import choice
+from termcolor import colored
 
 import sys
 
 from clonefish.options import Options, OptionsManager
 from clonefish.external import ExternalProvider
+from clonefish.interfear import InterfereProvider
 
 class Application:
 
@@ -32,6 +31,8 @@ class Application:
         provider = None
         if self.options.id == Options.CommandType.EXTERNAL:
             provider = ExternalProvider(self.options)
+        if self.options.id == Options.CommandType.INTERFERE:
+            provider = InterfereProvider(self.options)
 
         provider.execute()
 
